@@ -13,6 +13,10 @@ export class TodoDataService {
   constructor() { }
 
   addTodo(todo: Todo): TodoDataService {
+    todo.title = todo.title.trim();
+    if (!todo.title) {
+      return this;
+    }
     if (!todo.id) {
       todo.id = ++this.lastId;
     }
