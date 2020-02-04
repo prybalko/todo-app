@@ -1,16 +1,23 @@
 import { Injectable } from '@angular/core';
 import {Todo} from './todo';
+import {TodoStorageService} from './todo-storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoDataService {
 
-  lastId = 0;
+  private lastId: number;
+  private todos: Todo[];
 
-  todos: Todo[] = [];
+  constructor(private todoStorageService: TodoStorageService) {
+    this.todos = this.todoStorageService.get();
+    this.lastId = this.todos.length ? this.todos[this.todos.length - 1].id : 0;
+  }
 
-  constructor() { }
+  updateStorage() {
+    this.todoStorageService.put(this.todos);
+  }
 
   addTodo(todo: Todo): TodoDataService {
     todo.title = todo.title.trim();
@@ -21,11 +28,13 @@ export class TodoDataService {
       todo.id = ++this.lastId;
     }
     this.todos.push(todo);
+    this.updateStorage();
     return this;
   }
 
   deleteTodoById(id: number): TodoDataService {
     this.todos = this.todos.filter(todo => todo.id !== id);
+    this.updateStorage();
     return this;
   }
 
@@ -35,6 +44,7 @@ export class TodoDataService {
       return null;
     }
     Object.assign(todo, values);
+    this.updateStorage();
     return todo;
   }
 
@@ -50,6 +60,7 @@ export class TodoDataService {
     const updatedTodo = this.updateTodoById(todo.id, {
       complete: !todo.complete
     });
+    this.updateStorage();
     return updatedTodo;
   }
 }
