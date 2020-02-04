@@ -27,7 +27,7 @@ export class TodoDataService {
     if (!todo.id) {
       todo.id = ++this.lastId;
     }
-    this.todos.push(todo);
+    this.todos = this.todos.concat(todo);
     this.updateStorage();
     return this;
   }
@@ -44,6 +44,7 @@ export class TodoDataService {
       return null;
     }
     Object.assign(todo, values);
+    this.todos = [...this.todos];
     this.updateStorage();
     return todo;
   }
