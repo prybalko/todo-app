@@ -2,4 +2,15 @@
   <span class="todo-count">
     <strong>{{completedTodos.length}}</strong> {{completedTodos.length == 1 ? 'item' : 'items'}} left
   </span>
+
+
+  <div>
+    <a routerLink="/active">active</a>
+  </div>
+  <div>
+    <a routerLink="/completed">completed</a>
+  </div>
+  <div>
+    <a routerLink="/all" routerLinkActive="active">all</a>
+  </div>
 </footer>
