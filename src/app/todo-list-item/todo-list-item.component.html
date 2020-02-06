@@ -1,5 +1,13 @@
-<label>
-  <input class="toggle" type="checkbox" (click)="toggleTodoComplete(todo)" [checked]="todo.complete">
-  {{todo.title}}
-</label>
-<button class="destroy" (click)="removeTodo(todo)">-</button>
+<ng-template [ngIf]="!editing" [ngIfElse]="formTemplate">
+  <input class="toggle" type="checkbox" (click)="toggleTodoComplete()" [checked]="todo.complete">
+  <label (dblclick)="editTodo()">{{todo.title}}</label>
+  <button class="destroy" (click)="removeTodo()">-</button>
+</ng-template>
+
+<ng-template #formTemplate>
+  <form (ngSubmit)="doneEditing()">
+    <label>
+      <input type="text" [formControl]="todoForm" (keyup.escape)="revertEdits()" (blur)="doneEditing()" >
+    </label>
+  </form>
+</ng-template>

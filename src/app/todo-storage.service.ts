@@ -5,7 +5,7 @@ import {Todo} from './todo';
   providedIn: 'root'
 })
 export class TodoStorageService {
-  private STORAGE_ID = 'todo-app';
+  private STORAGE_ID = 'todo-angular';
 
   constructor() { }
 

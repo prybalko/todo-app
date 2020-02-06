@@ -3,7 +3,9 @@
 
   <app-todo-list [todos]="todos"
                  (toggleComplete)="onToggleTodoComplete($event)"
-                 (remove)="onRemoveTodo($event)"></app-todo-list>
+                 (remove)="onRemoveTodo($event)"
+                 (update)="OnTodoUpdate($event)"
+  ></app-todo-list>
 
   <app-todo-list-footer [todos]="todos"></app-todo-list-footer>
 

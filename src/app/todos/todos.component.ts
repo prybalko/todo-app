@@ -31,6 +31,10 @@ export class TodosComponent {
     this.todoDataService.toggleTodoComplete(todo);
   }
 
+  OnTodoUpdate(todo) {
+    this.todoDataService.updateTodoTitle(todo);
+  }
+
   get todos() {
     return this.todoDataService.getAllTodos();
   }

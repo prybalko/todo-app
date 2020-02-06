@@ -20,6 +20,9 @@ export class TodoListComponent implements OnChanges{
   @Output()
   toggleComplete: EventEmitter<Todo> = new EventEmitter();
 
+  @Output()
+  update: EventEmitter<Todo> = new EventEmitter();
+
   ngOnChanges() {
     const path = this.router.routerState.snapshot.url;
     if (path === '/active') {
@@ -40,6 +43,10 @@ export class TodoListComponent implements OnChanges{
 
   onRemoveTodo(todo: Todo) {
     this.remove.emit(todo);
+  }
+
+  onTodoUpdate(todo: Todo) {
+    this.update.emit(todo);
   }
 
 }

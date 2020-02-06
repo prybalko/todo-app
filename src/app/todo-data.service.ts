@@ -38,7 +38,7 @@ export class TodoDataService {
     return this;
   }
 
-  updateTodoById(id: number, values = {}): Todo {
+  private updateTodoById(id: number, values = {}): Todo {
     const todo = this.getTodoById(id);
     if (!todo) {
       return null;
@@ -61,7 +61,13 @@ export class TodoDataService {
     const updatedTodo = this.updateTodoById(todo.id, {
       complete: !todo.complete
     });
-    this.updateStorage();
+    return updatedTodo;
+  }
+
+  updateTodoTitle(todo: Todo): Todo {
+    const updatedTodo = this.updateTodoById(todo.id, {
+      title: todo.title
+    });
     return updatedTodo;
   }
 }
