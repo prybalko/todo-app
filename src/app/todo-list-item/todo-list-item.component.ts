@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Todo} from '../todo';
 import {FormControl} from '@angular/forms';
 
@@ -11,6 +11,8 @@ export class TodoListItemComponent implements OnInit {
   editing = false;
 
   todoForm: FormControl;
+
+  @ViewChild('formTemplate__input', {static: false}) inputElement: ElementRef;
 
   @Input()
   todo: Todo;
@@ -39,12 +41,13 @@ export class TodoListItemComponent implements OnInit {
   }
 
   editTodo() {
-    console.log('edit Todo');
     this.editing = true;
+    setTimeout(() => {
+      this.inputElement.nativeElement.focus();
+    }, 0);
   }
 
   doneEditing() {
-    console.log('doneEditing', this.todoForm.value);
     const updatedTodo = Object.assign(this.todo, {title: this.todoForm.value});
     this.update.emit(updatedTodo);
     this.editing = false;
