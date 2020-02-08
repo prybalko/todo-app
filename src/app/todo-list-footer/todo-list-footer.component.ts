@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {Todo} from '../todo';
 
 @Component({
@@ -8,15 +8,33 @@ import {Todo} from '../todo';
 })
 export class TodoListFooterComponent implements OnChanges {
 
+  activeTodos: Todo[];
   completedTodos: Todo[];
+  allCompleted: boolean;
 
   @Input()
   todos: Todo[];
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.completedTodos = this.todos.filter(todo => !todo.complete);
+  @Output()
+  removeCompleted: EventEmitter<null> = new EventEmitter();
+
+  @Output()
+  markAllTodos: EventEmitter<boolean> = new EventEmitter();
+
+  ngOnChanges() {
+    this.activeTodos = this.todos.filter(todo => !todo.complete);
+    this.completedTodos = this.todos.filter(todo => todo.complete);
+    this.allCompleted = !this.activeTodos.length;
   }
 
   constructor() { }
+
+  clearCompletedTodos() {
+    this.removeCompleted.emit();
+  }
+
+  markAll(allCompleted: boolean) {
+    this.markAllTodos.emit(!allCompleted);
+  }
 
 }

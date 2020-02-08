@@ -16,6 +16,10 @@ export class TodoListHeaderComponent {
   constructor() { }
 
   addTodo() {
+    this.newTodo.title = this.newTodo.title.trim();
+    if (!this.newTodo.title) {
+      return;
+    }
     this.add.emit(this.newTodo);
     this.newTodo = new Todo();
   }

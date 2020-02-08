@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import {Todo} from './todo';
+import {ITodo, Todo} from './todo';
 import {TodoStorageService} from './todo-storage.service';
+
+
+type TodoFilter = (todo: Todo) => boolean;
 
 @Injectable({
   providedIn: 'root'
@@ -8,66 +11,54 @@ import {TodoStorageService} from './todo-storage.service';
 export class TodoDataService {
 
   private lastId: number;
-  private todos: Todo[];
+  // tslint:disable-next-line:variable-name
+  private _todos: Todo[];
 
   constructor(private todoStorageService: TodoStorageService) {
-    this.todos = this.todoStorageService.get();
-    this.lastId = this.todos.length ? this.todos[this.todos.length - 1].id : 0;
   }
 
-  updateStorage() {
-    this.todoStorageService.put(this.todos);
-  }
-
-  addTodo(todo: Todo): TodoDataService {
-    todo.title = todo.title.trim();
-    if (!todo.title) {
-      return this;
+  get todos(): Todo[] {
+    if (!this._todos) {
+      this._todos = this.todoStorageService.get();
+      const todoCount = this._todos.length;
+      this.lastId = todoCount ? this._todos[todoCount - 1].id : 0;
     }
+    return this._todos;
+  }
+
+  set todos(todos: Todo[]) {
+    this._todos = todos;
+    this.todoStorageService.put(todos);
+  }
+
+  private getTodoById(id: number): Todo {
+    return this.todos.filter(todo => todo.id === id).pop();
+  }
+
+  addTodo(todo: Todo) {
     if (!todo.id) {
       todo.id = ++this.lastId;
     }
     this.todos = this.todos.concat(todo);
-    this.updateStorage();
-    return this;
   }
 
-  deleteTodoById(id: number): TodoDataService {
-    this.todos = this.todos.filter(todo => todo.id !== id);
-    this.updateStorage();
-    return this;
+  deleteByFilter(filter: TodoFilter) {
+    this.todos = this.todos.filter(todo => !filter(todo));
   }
 
-  private updateTodoById(id: number, values = {}): Todo {
-    const todo = this.getTodoById(id);
-    if (!todo) {
-      return null;
-    }
-    Object.assign(todo, values);
-    this.todos = [...this.todos];
-    this.updateStorage();
-    return todo;
+  deleteById(id: number) {
+    this.deleteByFilter(todo => todo.id === id);
+  }
+
+  updateByFilter(filter: TodoFilter, values: Partial<ITodo> = {}) {
+    this.todos = this.todos.map(todo => filter(todo) ? Object.assign(todo, values) : todo);
+  }
+
+  updateById(id: number, values: Partial<ITodo> = {}) {
+    this.updateByFilter(todo => todo.id === id, values);
   }
 
   getAllTodos(): Todo[] {
     return this.todos;
-  }
-
-  getTodoById(id: number): Todo {
-    return this.todos.filter(todo => todo.id === id).pop();
-  }
-
-  toggleTodoComplete(todo: Todo): Todo {
-    const updatedTodo = this.updateTodoById(todo.id, {
-      complete: !todo.complete
-    });
-    return updatedTodo;
-  }
-
-  updateTodoTitle(todo: Todo): Todo {
-    const updatedTodo = this.updateTodoById(todo.id, {
-      title: todo.title
-    });
-    return updatedTodo;
   }
 }

@@ -14,29 +14,34 @@ export class TodosComponent {
   constructor(private todoDataService: TodoDataService) {
   }
 
-  // addTodo() {
-  //   this.todoDataService.addTodo(this.newTodo);
-  //   this.newTodo = new Todo();
-  // }
-
   onAddTodo(todo: Todo) {
     this.todoDataService.addTodo(todo);
   }
 
-  onRemoveTodo(todo) {
-    this.todoDataService.deleteTodoById(todo.id);
+  onRemoveTodo(todo: Todo) {
+    this.todoDataService.deleteById(todo.id);
   }
 
-  onToggleTodoComplete(todo) {
-    this.todoDataService.toggleTodoComplete(todo);
+  onRemoveCompleted() {
+    this.todoDataService.deleteByFilter(todo => todo.complete);
   }
 
-  OnTodoUpdate(todo) {
-    this.todoDataService.updateTodoTitle(todo);
+  onToggleTodoComplete(todo: Todo) {
+    this.todoDataService.updateById(todo.id, {complete: !todo.complete});
   }
 
-  get todos() {
+  OnTodoUpdate(todo: Todo) {
+    this.todoDataService.updateById(todo.id, {title: todo.title});
+  }
+
+  onMarkAllTodos(isCompleted: boolean) {
+    this.todoDataService.updateByFilter(
+      t => true,
+      {complete: isCompleted}
+    );
+  }
+
+  get todos(): Todo[] {
     return this.todoDataService.getAllTodos();
   }
-
 }

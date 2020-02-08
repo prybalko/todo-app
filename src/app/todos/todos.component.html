@@ -7,6 +7,9 @@
                  (update)="OnTodoUpdate($event)"
   ></app-todo-list>
 
-  <app-todo-list-footer [todos]="todos"></app-todo-list-footer>
+  <app-todo-list-footer [todos]="todos"
+                        (removeCompleted)="onRemoveCompleted($event)"
+                        (markAllTodos)="onMarkAllTodos($event)"
+  ></app-todo-list-footer>
 
 </section>

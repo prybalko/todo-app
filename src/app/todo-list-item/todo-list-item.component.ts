@@ -48,8 +48,12 @@ export class TodoListItemComponent implements OnInit {
   }
 
   doneEditing() {
-    const updatedTodo = Object.assign(this.todo, {title: this.todoForm.value});
-    this.update.emit(updatedTodo);
+    const updatedTodo = Object.assign(this.todo, {title: this.todoForm.value.trim()});
+    if (updatedTodo.title) {
+      this.update.emit(updatedTodo);
+    } else {
+      this.remove.emit(updatedTodo);
+    }
     this.editing = false;
   }
 

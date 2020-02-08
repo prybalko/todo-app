@@ -1,7 +1,11 @@
 <footer class="footer" *ngIf="todos.length > 0">
   <span class="todo-count">
-    <strong>{{completedTodos.length}}</strong> {{completedTodos.length == 1 ? 'item' : 'items'}} left
+    <strong>{{activeTodos.length}}</strong> {{activeTodos.length == 1 ? 'item' : 'items'}} left
   </span>
+  <div>
+    <label for="toggle-all">Mark all as complete</label>
+    <input id="toggle-all" class="toggle-all" type="checkbox" [checked]="allCompleted" (click)="markAll(allCompleted)">
+  </div>
 
   <ul class="filters">
     <li>
@@ -14,4 +18,6 @@
       <a routerLink="/all" routerLinkActive="active">all</a>
     </li>
   </ul>
+
+  <button class="clear-completed" (click)="clearCompletedTodos()" [hidden]="!completedTodos.length">Clear completed</button>
 </footer>
