@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TodoListFooterComponent } from './todo-list-footer.component';
+import {TodoDataService} from '../todo-data.service';
+import {TodoStorageService} from '../todo-storage.service';
 
 describe('TodoListFooterComponent', () => {
   let component: TodoListFooterComponent;
@@ -8,6 +10,7 @@ describe('TodoListFooterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      providers: [TodoDataService, TodoStorageService],
       declarations: [ TodoListFooterComponent ]
     })
     .compileComponents();
@@ -16,6 +19,7 @@ describe('TodoListFooterComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TodoListFooterComponent);
     component = fixture.componentInstance;
+    component.todos = [];
     fixture.detectChanges();
   });
 

@@ -1,12 +1,15 @@
 import {TestBed, inject} from '@angular/core/testing';
 import {Todo} from './todo';
 import {TodoDataService} from './todo-data.service';
+import {TodoStorageService} from './todo-storage.service';
 
 describe('TodoDataService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [TodoDataService]
+      providers: [TodoDataService, TodoStorageService]
     });
+    const storage = TestBed.get(TodoStorageService);
+    storage.put([]);
   });
 
   it('should ...', inject([TodoDataService], (service: TodoDataService) => {
@@ -36,8 +39,9 @@ describe('TodoDataService', () => {
       const todo2 = new Todo({title: 'Hello 2', complete: true});
       service.addTodo(todo1);
       service.addTodo(todo2);
-      expect(service.getTodoById(1)).toEqual(todo1);
-      expect(service.getTodoById(2)).toEqual(todo2);
+      const todos = service.getAllTodos();
+      expect(todos[0]).toEqual(todo1);
+      expect(todos[1]).toEqual(todo2);
     }));
 
   });
@@ -50,9 +54,9 @@ describe('TodoDataService', () => {
       service.addTodo(todo1);
       service.addTodo(todo2);
       expect(service.getAllTodos()).toEqual([todo1, todo2]);
-      service.deleteTodoById(1);
+      service.deleteById(1);
       expect(service.getAllTodos()).toEqual([todo2]);
-      service.deleteTodoById(2);
+      service.deleteById(2);
       expect(service.getAllTodos()).toEqual([]);
     }));
 
@@ -62,7 +66,7 @@ describe('TodoDataService', () => {
       service.addTodo(todo1);
       service.addTodo(todo2);
       expect(service.getAllTodos()).toEqual([todo1, todo2]);
-      service.deleteTodoById(3);
+      service.deleteById(3);
       expect(service.getAllTodos()).toEqual([todo1, todo2]);
     }));
 
@@ -70,37 +74,13 @@ describe('TodoDataService', () => {
 
   describe('#updateTodoById(id, values)', () => {
 
-    it('should return todo with the corresponding id and updated data', inject([TodoDataService], (service: TodoDataService) => {
+    it('should update todo with the corresponding id', inject([TodoDataService], (service: TodoDataService) => {
       const todo = new Todo({title: 'Hello 1', complete: false});
       service.addTodo(todo);
-      const updatedTodo = service.updateTodoById(1, {
+      service.updateById(1, {
         title: 'new title'
       });
-      expect(updatedTodo.title).toEqual('new title');
+      expect(service.getAllTodos()[0].title).toEqual('new title');
     }));
-
-    it('should return null if todo is not found', inject([TodoDataService], (service: TodoDataService) => {
-      const todo = new Todo({title: 'Hello 1', complete: false});
-      service.addTodo(todo);
-      const updatedTodo = service.updateTodoById(2, {
-        title: 'new title'
-      });
-      expect(updatedTodo).toEqual(null);
-    }));
-
   });
-
-  describe('#toggleTodoComplete(todo)', () => {
-
-    it('should return the updated todo with inverse complete status', inject([TodoDataService], (service: TodoDataService) => {
-      const todo = new Todo({title: 'Hello 1', complete: false});
-      service.addTodo(todo);
-      const updatedTodo = service.toggleTodoComplete(todo);
-      expect(updatedTodo.complete).toEqual(true);
-      service.toggleTodoComplete(todo);
-      expect(updatedTodo.complete).toEqual(false);
-    }));
-
-  });
-
 });

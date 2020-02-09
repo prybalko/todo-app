@@ -15,24 +15,18 @@ export class TodoDataService {
   private _todos: Todo[];
 
   constructor(private todoStorageService: TodoStorageService) {
+    this._todos = this.todoStorageService.get();
+    const todoCount = this._todos.length;
+    this.lastId = todoCount ? this._todos[todoCount - 1].id : 0;
   }
 
   get todos(): Todo[] {
-    if (!this._todos) {
-      this._todos = this.todoStorageService.get();
-      const todoCount = this._todos.length;
-      this.lastId = todoCount ? this._todos[todoCount - 1].id : 0;
-    }
     return this._todos;
   }
 
   set todos(todos: Todo[]) {
     this._todos = todos;
     this.todoStorageService.put(todos);
-  }
-
-  private getTodoById(id: number): Todo {
-    return this.todos.filter(todo => todo.id === id).pop();
   }
 
   addTodo(todo: Todo) {

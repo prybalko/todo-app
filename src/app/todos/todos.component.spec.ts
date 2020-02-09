@@ -1,6 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TodosComponent } from './todos.component';
+import {TodoListComponent} from '../todo-list/todo-list.component';
+import {TodoListHeaderComponent} from '../todo-list-header/todo-list-header.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {TodoListFooterComponent} from '../todo-list-footer/todo-list-footer.component';
+import {TodoListItemComponent} from '../todo-list-item/todo-list-item.component';
+import {TodoDataService} from '../todo-data.service';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('TodosComponent', () => {
   let component: TodosComponent;
@@ -8,7 +15,14 @@ describe('TodosComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TodosComponent ]
+      providers: [TodoDataService],
+      imports: [ ReactiveFormsModule, FormsModule, RouterTestingModule ],
+      declarations: [
+        TodosComponent,
+        TodoListComponent,
+        TodoListHeaderComponent,
+        TodoListFooterComponent,
+        TodoListItemComponent ]
     })
     .compileComponents();
   }));
