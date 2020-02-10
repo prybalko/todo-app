@@ -44,11 +44,11 @@ export class TodoDataService {
     this.deleteByFilter(todo => todo.id === id);
   }
 
-  updateByFilter(filter: TodoFilter, values: Partial<ITodo> = {}) {
+  updateByFilter(filter: TodoFilter, values: Partial<ITodo>) {
     this.todos = this.todos.map(todo => filter(todo) ? Object.assign(todo, values) : todo);
   }
 
-  updateById(id: number, values: Partial<ITodo> = {}) {
+  updateById(id: number, values: Partial<ITodo>) {
     this.updateByFilter(todo => todo.id === id, values);
   }
 
